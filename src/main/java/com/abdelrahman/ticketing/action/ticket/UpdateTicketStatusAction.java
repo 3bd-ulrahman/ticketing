@@ -2,6 +2,9 @@ package com.abdelrahman.ticketing.action.ticket;
 
 import com.abdelrahman.ticketing.dto.*;
 import com.abdelrahman.ticketing.entity.*;
+import com.abdelrahman.ticketing.entity.enums.TicketStatus;
+import com.abdelrahman.ticketing.entity.enums.Role;
+import com.abdelrahman.ticketing.exception.ForbiddenException;
 import com.abdelrahman.ticketing.exception.InvalidTransitionException;
 import com.abdelrahman.ticketing.exception.ResourceNotFoundException;
 import com.abdelrahman.ticketing.repository.*;
@@ -19,24 +22,34 @@ public class UpdateTicketStatusAction {
     private final UserRepository userRepository;
     private final TicketStatusHistoryRepository statusHistoryRepository;
 
-    private static final Map<com.abdelrahman.ticketing.entity.enums.TicketStatus, Set<com.abdelrahman.ticketing.entity.enums.TicketStatus>> ALLOWED_TRANSITIONS = Map.of(
-            com.abdelrahman.ticketing.entity.enums.TicketStatus.OPEN, Set.of(com.abdelrahman.ticketing.entity.enums.TicketStatus.IN_PROGRESS, com.abdelrahman.ticketing.entity.enums.TicketStatus.CLOSED),
-            com.abdelrahman.ticketing.entity.enums.TicketStatus.IN_PROGRESS, Set.of(com.abdelrahman.ticketing.entity.enums.TicketStatus.RESOLVED, com.abdelrahman.ticketing.entity.enums.TicketStatus.OPEN),
-            com.abdelrahman.ticketing.entity.enums.TicketStatus.RESOLVED, Set.of(com.abdelrahman.ticketing.entity.enums.TicketStatus.CLOSED, com.abdelrahman.ticketing.entity.enums.TicketStatus.REOPENED),
-            com.abdelrahman.ticketing.entity.enums.TicketStatus.CLOSED, Set.of(com.abdelrahman.ticketing.entity.enums.TicketStatus.REOPENED),
-            com.abdelrahman.ticketing.entity.enums.TicketStatus.REOPENED, Set.of(com.abdelrahman.ticketing.entity.enums.TicketStatus.IN_PROGRESS)
+    private static final Map<TicketStatus, Set<TicketStatus>> ALLOWED_TRANSITIONS = Map.of(
+            TicketStatus.OPEN, Set.of(TicketStatus.IN_PROGRESS, TicketStatus.CLOSED),
+            TicketStatus.IN_PROGRESS, Set.of(TicketStatus.RESOLVED, TicketStatus.OPEN),
+            TicketStatus.RESOLVED, Set.of(TicketStatus.CLOSED, TicketStatus.REOPENED),
+            TicketStatus.CLOSED, Set.of(TicketStatus.REOPENED),
+            TicketStatus.REOPENED, Set.of(TicketStatus.IN_PROGRESS)
     );
 
-    public TicketResponse execute(Long ticketId, com.abdelrahman.ticketing.entity.enums.TicketStatus newStatus, Long userId) {
+    public TicketResponse execute(Long ticketId, TicketStatus newStatus, Long userId) {
         Ticket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new ResourceNotFoundException("Ticket", ticketId));
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", userId));
 
-        com.abdelrahman.ticketing.entity.enums.TicketStatus oldStatus = ticket.getStatus();
+        if (user.getRole() == Role.USER) {
+            throw new ForbiddenException("Users cannot update ticket status");
+        }
 
-        Set<com.abdelrahman.ticketing.entity.enums.TicketStatus> allowed = ALLOWED_TRANSITIONS.getOrDefault(oldStatus, Set.of());
+        if (user.getRole() == Role.AGENT) {
+            if (ticket.getAssignedTo() == null || !ticket.getAssignedTo().getId().equals(userId)) {
+                throw new ForbiddenException("Agents can only update status of tickets assigned to them");
+            }
+        }
+
+        TicketStatus oldStatus = ticket.getStatus();
+
+        Set<TicketStatus> allowed = ALLOWED_TRANSITIONS.getOrDefault(oldStatus, Set.of());
         if (!allowed.contains(newStatus)) {
             throw new InvalidTransitionException(oldStatus, newStatus);
         }

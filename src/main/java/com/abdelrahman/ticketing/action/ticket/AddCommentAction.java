@@ -2,6 +2,8 @@ package com.abdelrahman.ticketing.action.ticket;
 
 import com.abdelrahman.ticketing.dto.*;
 import com.abdelrahman.ticketing.entity.*;
+import com.abdelrahman.ticketing.entity.enums.Role;
+import com.abdelrahman.ticketing.exception.ForbiddenException;
 import com.abdelrahman.ticketing.exception.ResourceNotFoundException;
 import com.abdelrahman.ticketing.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -15,12 +17,18 @@ public class AddCommentAction {
     private final TicketRepository ticketRepository;
     private final UserRepository userRepository;
 
-    public CommentResponse execute(Long ticketId, CommentRequest request) {
+    public CommentResponse execute(Long ticketId, CommentRequest request, Long userId) {
         Ticket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new ResourceNotFoundException("Ticket", ticketId));
 
-        User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new ResourceNotFoundException("User", request.getUserId()));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", userId));
+
+        if (user.getRole() == Role.USER) {
+            if (ticket.getCreatedBy() == null || !ticket.getCreatedBy().getId().equals(userId)) {
+                throw new ForbiddenException("Users can only comment on their own tickets");
+            }
+        }
 
         Comment comment = Comment.builder()
                 .ticket(ticket)

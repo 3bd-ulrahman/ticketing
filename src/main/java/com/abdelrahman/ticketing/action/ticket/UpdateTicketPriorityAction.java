@@ -3,8 +3,11 @@ package com.abdelrahman.ticketing.action.ticket;
 import com.abdelrahman.ticketing.dto.*;
 import com.abdelrahman.ticketing.entity.*;
 import com.abdelrahman.ticketing.entity.enums.TicketPriority;
+import com.abdelrahman.ticketing.entity.enums.Role;
+import com.abdelrahman.ticketing.exception.ForbiddenException;
 import com.abdelrahman.ticketing.exception.ResourceNotFoundException;
 import com.abdelrahman.ticketing.repository.TicketRepository;
+import com.abdelrahman.ticketing.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -13,10 +16,24 @@ import org.springframework.stereotype.Component;
 public class UpdateTicketPriorityAction {
 
     private final TicketRepository ticketRepository;
+    private final UserRepository userRepository;
 
-    public TicketResponse execute(Long ticketId, TicketPriority priority) {
+    public TicketResponse execute(Long ticketId, TicketPriority priority, Long userId) {
         Ticket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new ResourceNotFoundException("Ticket", ticketId));
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", userId));
+
+        if (user.getRole() == Role.USER) {
+            throw new ForbiddenException("Users cannot update ticket priority");
+        }
+
+        if (user.getRole() == Role.AGENT) {
+            if (ticket.getAssignedTo() == null || !ticket.getAssignedTo().getId().equals(userId)) {
+                throw new ForbiddenException("Agents can only update priority of tickets assigned to them");
+            }
+        }
 
         ticket.setPriority(priority);
         Ticket saved = ticketRepository.save(ticket);

@@ -21,7 +21,4 @@ public class TicketRequest {
 
     @NotNull(message = "Category ID is required")
     private Long categoryId;
-
-    @NotNull(message = "User ID is required")
-    private Long userId;
 }

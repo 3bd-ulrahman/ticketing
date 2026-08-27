@@ -2,6 +2,8 @@ package com.abdelrahman.ticketing.action.ticket;
 
 import com.abdelrahman.ticketing.dto.*;
 import com.abdelrahman.ticketing.entity.*;
+import com.abdelrahman.ticketing.entity.enums.Role;
+import com.abdelrahman.ticketing.exception.ForbiddenException;
 import com.abdelrahman.ticketing.exception.ResourceNotFoundException;
 import com.abdelrahman.ticketing.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +16,14 @@ public class AssignTicketAction {
     private final TicketRepository ticketRepository;
     private final UserRepository userRepository;
 
-    public TicketResponse execute(Long ticketId, Long assignedToId) {
+    public TicketResponse execute(Long ticketId, Long assignedToId, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", userId));
+
+        if (user.getRole() != Role.ADMIN) {
+            throw new ForbiddenException("Only admins can assign tickets");
+        }
+
         Ticket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new ResourceNotFoundException("Ticket", ticketId));
 
@@ -46,12 +55,12 @@ public class AssignTicketAction {
                         .email(ticket.getCreatedBy().getEmail())
                         .role(ticket.getCreatedBy().getRole())
                         .build())
-                .assignedTo(UserResponse.builder()
+                .assignedTo(ticket.getAssignedTo() != null ? UserResponse.builder()
                         .id(ticket.getAssignedTo().getId())
                         .name(ticket.getAssignedTo().getName())
                         .email(ticket.getAssignedTo().getEmail())
                         .role(ticket.getAssignedTo().getRole())
-                        .build())
+                        .build() : null)
                 .createdAt(ticket.getCreatedAt())
                 .updatedAt(ticket.getUpdatedAt())
                 .build();

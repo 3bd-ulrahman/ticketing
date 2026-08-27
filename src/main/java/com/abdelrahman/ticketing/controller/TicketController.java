@@ -2,13 +2,13 @@ package com.abdelrahman.ticketing.controller;
 
 import com.abdelrahman.ticketing.action.ticket.*;
 import com.abdelrahman.ticketing.dto.*;
-import com.abdelrahman.ticketing.entity.Comment;
 import com.abdelrahman.ticketing.entity.Ticket;
-import com.abdelrahman.ticketing.entity.enums.TicketPriority;
-import com.abdelrahman.ticketing.entity.enums.TicketStatus;
+import com.abdelrahman.ticketing.entity.User;
+import com.abdelrahman.ticketing.entity.enums.Role;
 import com.abdelrahman.ticketing.exception.ResourceNotFoundException;
 import com.abdelrahman.ticketing.repository.CommentRepository;
 import com.abdelrahman.ticketing.repository.TicketRepository;
+import com.abdelrahman.ticketing.repository.UserRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,6 +24,7 @@ public class TicketController {
 
     private final TicketRepository ticketRepository;
     private final CommentRepository commentRepository;
+    private final UserRepository userRepository;
     private final CreateTicketAction createTicketAction;
     private final UpdateTicketStatusAction updateTicketStatusAction;
     private final AssignTicketAction assignTicketAction;
@@ -31,63 +32,102 @@ public class TicketController {
     private final AddCommentAction addCommentAction;
 
     @GetMapping
-    public ResponseEntity<List<TicketResponse>> getAll() {
-        List<TicketResponse> tickets = ticketRepository.findAll().stream()
+    public ResponseEntity<List<TicketResponse>> getAll(@RequestHeader("X-User-Id") Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", userId));
+
+        List<Ticket> tickets;
+        if (user.getRole() == Role.USER) {
+            tickets = ticketRepository.findByCreatedById(userId);
+        } else {
+            tickets = ticketRepository.findAll();
+        }
+
+        List<TicketResponse> responses = tickets.stream()
                 .map(this::mapToResponse)
                 .toList();
-        return ResponseEntity.ok(tickets);
+        return ResponseEntity.ok(responses);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TicketResponse> getById(@PathVariable Long id) {
+    public ResponseEntity<TicketResponse> getById(
+            @PathVariable Long id,
+            @RequestHeader("X-User-Id") Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", userId));
+
         Ticket ticket = ticketRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Ticket", id));
+
+        if (user.getRole() == Role.USER) {
+            if (ticket.getCreatedBy() == null || !ticket.getCreatedBy().getId().equals(userId)) {
+                throw new ResourceNotFoundException("Ticket", id);
+            }
+        }
+
         return ResponseEntity.ok(mapToResponse(ticket));
     }
 
     @PostMapping
-    public ResponseEntity<TicketResponse> create(@Valid @RequestBody TicketRequest request) {
-        TicketResponse response = createTicketAction.execute(request, request.getUserId());
+    public ResponseEntity<TicketResponse> create(
+            @Valid @RequestBody TicketRequest request,
+            @RequestHeader("X-User-Id") Long userId) {
+        TicketResponse response = createTicketAction.execute(request, userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PatchMapping("/{id}/status")
     public ResponseEntity<TicketResponse> updateStatus(
             @PathVariable Long id,
-            @Valid @RequestBody UpdateStatusRequest request) {
-        TicketResponse response = updateTicketStatusAction.execute(id, request.getStatus(), request.getUserId());
+            @Valid @RequestBody UpdateStatusRequest request,
+            @RequestHeader("X-User-Id") Long userId) {
+        TicketResponse response = updateTicketStatusAction.execute(id, request.getStatus(), userId);
         return ResponseEntity.ok(response);
     }
 
     @PatchMapping("/{id}/assign")
     public ResponseEntity<TicketResponse> assign(
             @PathVariable Long id,
-            @Valid @RequestBody AssignTicketRequest request) {
-        TicketResponse response = assignTicketAction.execute(id, request.getAssigneeId());
+            @Valid @RequestBody AssignTicketRequest request,
+            @RequestHeader("X-User-Id") Long userId) {
+        TicketResponse response = assignTicketAction.execute(id, request.getAssigneeId(), userId);
         return ResponseEntity.ok(response);
     }
 
     @PatchMapping("/{id}/priority")
     public ResponseEntity<TicketResponse> updatePriority(
             @PathVariable Long id,
-            @Valid @RequestBody UpdatePriorityRequest request) {
-        TicketResponse response = updateTicketPriorityAction.execute(id, request.getPriority());
+            @Valid @RequestBody UpdatePriorityRequest request,
+            @RequestHeader("X-User-Id") Long userId) {
+        TicketResponse response = updateTicketPriorityAction.execute(id, request.getPriority(), userId);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/{id}/comments")
     public ResponseEntity<CommentResponse> addComment(
             @PathVariable Long id,
-            @Valid @RequestBody CommentRequest request) {
-        CommentResponse response = addCommentAction.execute(id, request);
+            @Valid @RequestBody CommentRequest request,
+            @RequestHeader("X-User-Id") Long userId) {
+        CommentResponse response = addCommentAction.execute(id, request, userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping("/{id}/comments")
-    public ResponseEntity<List<CommentResponse>> getComments(@PathVariable Long id) {
-        if (!ticketRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Ticket", id);
+    public ResponseEntity<List<CommentResponse>> getComments(
+            @PathVariable Long id,
+            @RequestHeader("X-User-Id") Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", userId));
+
+        Ticket ticket = ticketRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Ticket", id));
+
+        if (user.getRole() == Role.USER) {
+            if (ticket.getCreatedBy() == null || !ticket.getCreatedBy().getId().equals(userId)) {
+                throw new ResourceNotFoundException("Ticket", id);
+            }
         }
+
         List<CommentResponse> comments = commentRepository.findByTicketId(id).stream()
                 .map(comment -> CommentResponse.builder()
                         .id(comment.getId())

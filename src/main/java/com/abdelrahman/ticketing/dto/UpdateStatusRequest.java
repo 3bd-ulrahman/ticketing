@@ -13,7 +13,4 @@ public class UpdateStatusRequest {
 
     @NotNull(message = "Status is required")
     private TicketStatus status;
-
-    @NotNull(message = "User ID is required")
-    private Long userId;
 }
