@@ -4,6 +4,8 @@ import com.abdelrahman.ticketing.action.category.*;
 import com.abdelrahman.ticketing.dto.CategoryRequest;
 import com.abdelrahman.ticketing.dto.CategoryResponse;
 import com.abdelrahman.ticketing.repository.CategoryRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,6 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/categories")
 @RequiredArgsConstructor
+@Tag(name = "Categories", description = "Manage ticket categories")
 public class CategoryController {
 
     private final CategoryRepository categoryRepository;
@@ -23,6 +26,7 @@ public class CategoryController {
     private final DeleteCategoryAction deleteCategoryAction;
 
     @GetMapping
+    @Operation(summary = "List all categories")
     public ResponseEntity<List<CategoryResponse>> getAll() {
         List<CategoryResponse> categories = categoryRepository.findAll().stream()
                 .map(category -> CategoryResponse.builder()
@@ -36,6 +40,7 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Get category by ID")
     public ResponseEntity<CategoryResponse> getById(@PathVariable Long id) {
         var category = categoryRepository.findById(id)
                 .orElseThrow(() -> new com.abdelrahman.ticketing.exception.ResourceNotFoundException("Category", id));
@@ -48,6 +53,7 @@ public class CategoryController {
     }
 
     @PostMapping
+    @Operation(summary = "Create a category", description = "ADMIN only.")
     public ResponseEntity<CategoryResponse> create(
             @Valid @RequestBody CategoryRequest request,
             @RequestHeader("X-User-Id") Long userId) {
@@ -56,6 +62,7 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Update a category", description = "ADMIN only.")
     public ResponseEntity<CategoryResponse> update(
             @PathVariable Long id,
             @Valid @RequestBody CategoryRequest request,
@@ -65,6 +72,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Delete a category", description = "ADMIN only.")
     public ResponseEntity<Void> delete(
             @PathVariable Long id,
             @RequestHeader("X-User-Id") Long userId) {

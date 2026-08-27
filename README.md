@@ -83,51 +83,17 @@ Three roles are seeded:
 | POST | `/api/tickets/{id}/comments` | Add comment | ADMIN/AGENT: any, USER: own ticket only |
 | GET | `/api/tickets/{id}/comments` | Get comments | ADMIN/AGENT: any, USER: own ticket only |
 
-## Request Examples
+## Interactive API Docs (Swagger UI)
 
-### Create Ticket
-```bash
-curl -X POST http://localhost:8080/api/tickets \
-  -H "Content-Type: application/json" \
-  -H "X-User-Id: 3" \
-  -d '{
-    "title": "Login page not loading",
-    "description": "The login page returns a 500 error",
-    "category_id": 1
-  }'
-```
+A live, interactive OpenAPI specification is generated automatically from the controllers:
 
-### Update Status
-```bash
-curl -X PATCH http://localhost:8080/api/tickets/1/status \
-  -H "Content-Type: application/json" \
-  -H "X-User-Id: 2" \
-  -d '{"status": "IN_PROGRESS"}'
-```
+| Resource | URL |
+|----------|-----|
+| Swagger UI (HTML) | `http://localhost:8080/swagger-ui.html` |
+| OpenAPI JSON | `http://localhost:8080/v3/api-docs` |
+| OpenAPI YAML | `http://localhost:8080/v3/api-docs.yaml` |
 
-### Assign Ticket
-```bash
-curl -X PATCH http://localhost:8080/api/tickets/1/assign \
-  -H "Content-Type: application/json" \
-  -H "X-User-Id: 1" \
-  -d '{"assignee_id": 2}'
-```
-
-### Update Priority
-```bash
-curl -X PATCH http://localhost:8080/api/tickets/1/priority \
-  -H "Content-Type: application/json" \
-  -H "X-User-Id: 1" \
-  -d '{"priority": "HIGH"}'
-```
-
-### Add Comment
-```bash
-curl -X POST http://localhost:8080/api/tickets/1/comments \
-  -H "Content-Type: application/json" \
-  -H "X-User-Id: 3" \
-  -d '{"content": "Still experiencing this issue"}'
-```
+Select `Authorize` in Swagger UI and enter an `X-User-Id` header value (e.g. `1` for ADMIN) to exercise the endpoints (mutating endpoints require it). A static export of the spec is also kept in **`openapi.yaml`** — import it into any OpenAPI-compatible tool (Postman, Insomnia, Apidog, etc.). Because the docs are generated from the controllers, they always stay in sync with the code.
 
 ## Status Transitions
 

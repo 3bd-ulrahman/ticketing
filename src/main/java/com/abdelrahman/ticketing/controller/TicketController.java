@@ -9,6 +9,8 @@ import com.abdelrahman.ticketing.exception.ResourceNotFoundException;
 import com.abdelrahman.ticketing.repository.CommentRepository;
 import com.abdelrahman.ticketing.repository.TicketRepository;
 import com.abdelrahman.ticketing.repository.UserRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/tickets")
 @RequiredArgsConstructor
+@Tag(name = "Tickets", description = "Manage support tickets and their comments")
 public class TicketController {
 
     private final TicketRepository ticketRepository;
@@ -32,6 +35,7 @@ public class TicketController {
     private final AddCommentAction addCommentAction;
 
     @GetMapping
+    @Operation(summary = "List tickets", description = "ADMIN/AGENT see all tickets; USER sees only their own.")
     public ResponseEntity<List<TicketResponse>> getAll(@RequestHeader("X-User-Id") Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", userId));
@@ -50,6 +54,7 @@ public class TicketController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Get ticket by ID", description = "ADMIN/AGENT can view any ticket; USER can only view their own.")
     public ResponseEntity<TicketResponse> getById(
             @PathVariable Long id,
             @RequestHeader("X-User-Id") Long userId) {
@@ -69,6 +74,7 @@ public class TicketController {
     }
 
     @PostMapping
+    @Operation(summary = "Create a ticket")
     public ResponseEntity<TicketResponse> create(
             @Valid @RequestBody TicketRequest request,
             @RequestHeader("X-User-Id") Long userId) {
@@ -77,6 +83,7 @@ public class TicketController {
     }
 
     @PatchMapping("/{id}/status")
+    @Operation(summary = "Update ticket status", description = "ADMIN: any ticket; AGENT: assigned tickets only.")
     public ResponseEntity<TicketResponse> updateStatus(
             @PathVariable Long id,
             @Valid @RequestBody UpdateStatusRequest request,
@@ -86,6 +93,7 @@ public class TicketController {
     }
 
     @PatchMapping("/{id}/assign")
+    @Operation(summary = "Assign a ticket", description = "ADMIN only.")
     public ResponseEntity<TicketResponse> assign(
             @PathVariable Long id,
             @Valid @RequestBody AssignTicketRequest request,
@@ -95,6 +103,7 @@ public class TicketController {
     }
 
     @PatchMapping("/{id}/priority")
+    @Operation(summary = "Update ticket priority", description = "ADMIN: any ticket; AGENT: assigned tickets only.")
     public ResponseEntity<TicketResponse> updatePriority(
             @PathVariable Long id,
             @Valid @RequestBody UpdatePriorityRequest request,
@@ -104,6 +113,7 @@ public class TicketController {
     }
 
     @PostMapping("/{id}/comments")
+    @Operation(summary = "Add a comment", description = "ADMIN/AGENT: any ticket; USER: own ticket only.")
     public ResponseEntity<CommentResponse> addComment(
             @PathVariable Long id,
             @Valid @RequestBody CommentRequest request,
@@ -113,6 +123,7 @@ public class TicketController {
     }
 
     @GetMapping("/{id}/comments")
+    @Operation(summary = "List comments for a ticket", description = "ADMIN/AGENT: any ticket; USER: own ticket only.")
     public ResponseEntity<List<CommentResponse>> getComments(
             @PathVariable Long id,
             @RequestHeader("X-User-Id") Long userId) {

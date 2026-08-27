@@ -1,0 +1,761 @@
+openapi: 3.0.1
+info:
+  title: Default module
+  description: ''
+  version: 1.0.0
+tags: []
+paths:
+  /categories:
+    get:
+      summary: index
+      deprecated: false
+      description: ''
+      tags: []
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              example:
+                - id: 1
+                  name: Technical Support
+                  description: Hardware and software issues
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 2
+                  name: Billing
+                  description: Payment and invoicing inquiries
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 3
+                  name: Feature Request
+                  description: New feature suggestions
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 4
+                  name: Bug Report
+                  description: Software bugs and defects
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 5
+                  name: General Inquiry
+                  description: General questions and support
+                  createdAt: '2026-08-26T15:33:58.356508'
+      security: []
+    post:
+      summary: store
+      deprecated: false
+      description: ''
+      tags: []
+      parameters:
+        - name: Accept
+          in: header
+          description: ''
+          required: true
+          example: application/json
+          schema:
+            type: string
+        - name: Content-Type
+          in: header
+          description: ''
+          required: true
+          example: application/json
+          schema:
+            type: string
+        - name: X-User-Id
+          in: header
+          description: ''
+          required: false
+          example: '1'
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+            example:
+              name: test
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              example:
+                - id: 1
+                  name: Technical Support
+                  description: Hardware and software issues
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 2
+                  name: Billing
+                  description: Payment and invoicing inquiries
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 3
+                  name: Feature Request
+                  description: New feature suggestions
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 4
+                  name: Bug Report
+                  description: Software bugs and defects
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 5
+                  name: General Inquiry
+                  description: General questions and support
+                  createdAt: '2026-08-26T15:33:58.356508'
+          headers: {}
+      security: []
+  /categories/1:
+    get:
+      summary: show
+      deprecated: false
+      description: ''
+      tags: []
+      parameters:
+        - name: Accept
+          in: header
+          description: ''
+          required: false
+          example: application/json
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              example:
+                - id: 1
+                  name: Technical Support
+                  description: Hardware and software issues
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 2
+                  name: Billing
+                  description: Payment and invoicing inquiries
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 3
+                  name: Feature Request
+                  description: New feature suggestions
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 4
+                  name: Bug Report
+                  description: Software bugs and defects
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 5
+                  name: General Inquiry
+                  description: General questions and support
+                  createdAt: '2026-08-26T15:33:58.356508'
+          headers: {}
+      security: []
+  /categories/6:
+    put:
+      summary: update
+      deprecated: false
+      description: ''
+      tags: []
+      parameters:
+        - name: Accept
+          in: header
+          description: ''
+          required: false
+          example: application/json
+          schema:
+            type: string
+        - name: X-User-Id
+          in: header
+          description: ''
+          required: false
+          example: '1'
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+            example:
+              name: category1
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              example:
+                - id: 1
+                  name: Technical Support
+                  description: Hardware and software issues
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 2
+                  name: Billing
+                  description: Payment and invoicing inquiries
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 3
+                  name: Feature Request
+                  description: New feature suggestions
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 4
+                  name: Bug Report
+                  description: Software bugs and defects
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 5
+                  name: General Inquiry
+                  description: General questions and support
+                  createdAt: '2026-08-26T15:33:58.356508'
+          headers: {}
+      security: []
+    delete:
+      summary: delete
+      deprecated: false
+      description: ''
+      tags: []
+      parameters:
+        - name: Accept
+          in: header
+          description: ''
+          required: false
+          example: application/json
+          schema:
+            type: string
+        - name: X-User-Id
+          in: header
+          description: ''
+          required: false
+          example: '1'
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+            example: ''
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              example:
+                - id: 1
+                  name: Technical Support
+                  description: Hardware and software issues
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 2
+                  name: Billing
+                  description: Payment and invoicing inquiries
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 3
+                  name: Feature Request
+                  description: New feature suggestions
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 4
+                  name: Bug Report
+                  description: Software bugs and defects
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 5
+                  name: General Inquiry
+                  description: General questions and support
+                  createdAt: '2026-08-26T15:33:58.356508'
+          headers: {}
+      security: []
+  /tickets:
+    get:
+      summary: index
+      deprecated: false
+      description: ''
+      tags: []
+      parameters:
+        - name: Accept
+          in: header
+          description: ''
+          required: false
+          example: application/json
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+            examples: {}
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              example:
+                - id: 1
+                  name: Technical Support
+                  description: Hardware and software issues
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 2
+                  name: Billing
+                  description: Payment and invoicing inquiries
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 3
+                  name: Feature Request
+                  description: New feature suggestions
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 4
+                  name: Bug Report
+                  description: Software bugs and defects
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 5
+                  name: General Inquiry
+                  description: General questions and support
+                  createdAt: '2026-08-26T15:33:58.356508'
+          headers: {}
+      security: []
+    post:
+      summary: store
+      deprecated: false
+      description: ''
+      tags: []
+      parameters:
+        - name: Accept
+          in: header
+          description: ''
+          required: true
+          example: application/json
+          schema:
+            type: string
+        - name: Content-Type
+          in: header
+          description: ''
+          required: true
+          example: application/json
+          schema:
+            type: string
+        - name: X-User-Id
+          in: header
+          description: ''
+          required: false
+          example: '1'
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+            example:
+              category_id: 1
+              title: test
+              description: lorem
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              example:
+                - id: 1
+                  name: Technical Support
+                  description: Hardware and software issues
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 2
+                  name: Billing
+                  description: Payment and invoicing inquiries
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 3
+                  name: Feature Request
+                  description: New feature suggestions
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 4
+                  name: Bug Report
+                  description: Software bugs and defects
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 5
+                  name: General Inquiry
+                  description: General questions and support
+                  createdAt: '2026-08-26T15:33:58.356508'
+          headers: {}
+      security: []
+  /tickets/8:
+    get:
+      summary: show
+      deprecated: false
+      description: ''
+      tags: []
+      parameters:
+        - name: Accept
+          in: header
+          description: ''
+          required: false
+          example: application/json
+          schema:
+            type: string
+        - name: X-User-Id
+          in: header
+          description: ''
+          required: false
+          example: '3'
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              example:
+                - id: 1
+                  name: Technical Support
+                  description: Hardware and software issues
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 2
+                  name: Billing
+                  description: Payment and invoicing inquiries
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 3
+                  name: Feature Request
+                  description: New feature suggestions
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 4
+                  name: Bug Report
+                  description: Software bugs and defects
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 5
+                  name: General Inquiry
+                  description: General questions and support
+                  createdAt: '2026-08-26T15:33:58.356508'
+          headers: {}
+      security: []
+  /tickets/1/status:
+    patch:
+      summary: update
+      deprecated: false
+      description: ''
+      tags: []
+      parameters:
+        - name: Accept
+          in: header
+          description: ''
+          required: false
+          example: application/json
+          schema:
+            type: string
+        - name: X-User-Id
+          in: header
+          description: ''
+          required: false
+          example: '1'
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+            example:
+              status: CLOSED
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              example:
+                - id: 1
+                  name: Technical Support
+                  description: Hardware and software issues
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 2
+                  name: Billing
+                  description: Payment and invoicing inquiries
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 3
+                  name: Feature Request
+                  description: New feature suggestions
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 4
+                  name: Bug Report
+                  description: Software bugs and defects
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 5
+                  name: General Inquiry
+                  description: General questions and support
+                  createdAt: '2026-08-26T15:33:58.356508'
+          headers: {}
+      security: []
+  /tickets/6/assign:
+    patch:
+      summary: assign
+      deprecated: false
+      description: ''
+      tags: []
+      parameters:
+        - name: Accept
+          in: header
+          description: ''
+          required: false
+          example: application/json
+          schema:
+            type: string
+        - name: X-User-Id
+          in: header
+          description: ''
+          required: false
+          example: '3'
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+            example:
+              assignee_id: 1
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              example:
+                - id: 1
+                  name: Technical Support
+                  description: Hardware and software issues
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 2
+                  name: Billing
+                  description: Payment and invoicing inquiries
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 3
+                  name: Feature Request
+                  description: New feature suggestions
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 4
+                  name: Bug Report
+                  description: Software bugs and defects
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 5
+                  name: General Inquiry
+                  description: General questions and support
+                  createdAt: '2026-08-26T15:33:58.356508'
+          headers: {}
+      security: []
+  /tickets/6/priority:
+    patch:
+      summary: update priority
+      deprecated: false
+      description: ''
+      tags: []
+      parameters:
+        - name: Accept
+          in: header
+          description: ''
+          required: false
+          example: application/json
+          schema:
+            type: string
+        - name: X-User-Id
+          in: header
+          description: ''
+          required: false
+          example: '3'
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+            example:
+              priority: HIGH
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              example:
+                - id: 1
+                  name: Technical Support
+                  description: Hardware and software issues
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 2
+                  name: Billing
+                  description: Payment and invoicing inquiries
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 3
+                  name: Feature Request
+                  description: New feature suggestions
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 4
+                  name: Bug Report
+                  description: Software bugs and defects
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 5
+                  name: General Inquiry
+                  description: General questions and support
+                  createdAt: '2026-08-26T15:33:58.356508'
+          headers: {}
+      security: []
+  /tickets/6/comments:
+    post:
+      summary: add comment
+      deprecated: false
+      description: ''
+      tags: []
+      parameters:
+        - name: Accept
+          in: header
+          description: ''
+          required: false
+          example: application/json
+          schema:
+            type: string
+        - name: X-User-Id
+          in: header
+          description: ''
+          required: false
+          example: '3'
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+            example:
+              content: lorem ipsum
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              example:
+                - id: 1
+                  name: Technical Support
+                  description: Hardware and software issues
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 2
+                  name: Billing
+                  description: Payment and invoicing inquiries
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 3
+                  name: Feature Request
+                  description: New feature suggestions
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 4
+                  name: Bug Report
+                  description: Software bugs and defects
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 5
+                  name: General Inquiry
+                  description: General questions and support
+                  createdAt: '2026-08-26T15:33:58.356508'
+          headers: {}
+      security: []
+    get:
+      summary: show comment
+      deprecated: false
+      description: ''
+      tags: []
+      parameters:
+        - name: Accept
+          in: header
+          description: ''
+          required: false
+          example: application/json
+          schema:
+            type: string
+        - name: X-User-Id
+          in: header
+          description: ''
+          required: false
+          example: '1'
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+            example: ''
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              example:
+                - id: 1
+                  name: Technical Support
+                  description: Hardware and software issues
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 2
+                  name: Billing
+                  description: Payment and invoicing inquiries
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 3
+                  name: Feature Request
+                  description: New feature suggestions
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 4
+                  name: Bug Report
+                  description: Software bugs and defects
+                  createdAt: '2026-08-26T15:33:58.356508'
+                - id: 5
+                  name: General Inquiry
+                  description: General questions and support
+                  createdAt: '2026-08-26T15:33:58.356508'
+          headers: {}
+      security: []
+components:
+  schemas: {}
+  responses: {}
+  securitySchemes: {}
+servers:
+  - url: localhost:8080/api/
+    description: Develop Env
+security: []
