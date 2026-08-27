@@ -48,20 +48,27 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<CategoryResponse> create(@Valid @RequestBody CategoryRequest request) {
-        CategoryResponse response = createCategoryAction.execute(request);
+    public ResponseEntity<CategoryResponse> create(
+            @Valid @RequestBody CategoryRequest request,
+            @RequestHeader("X-User-Id") Long userId) {
+        CategoryResponse response = createCategoryAction.execute(request, userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CategoryResponse> update(@PathVariable Long id, @Valid @RequestBody CategoryRequest request) {
-        CategoryResponse response = updateCategoryAction.execute(id, request);
+    public ResponseEntity<CategoryResponse> update(
+            @PathVariable Long id,
+            @Valid @RequestBody CategoryRequest request,
+            @RequestHeader("X-User-Id") Long userId) {
+        CategoryResponse response = updateCategoryAction.execute(id, request, userId);
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        deleteCategoryAction.execute(id);
+    public ResponseEntity<Void> delete(
+            @PathVariable Long id,
+            @RequestHeader("X-User-Id") Long userId) {
+        deleteCategoryAction.execute(id, userId);
         return ResponseEntity.noContent().build();
     }
 }

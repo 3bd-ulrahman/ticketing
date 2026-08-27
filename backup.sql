@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict yMguwp4BpgtFh8BdjwIftsjrSEPOsBbN3wPOY5GUUsEgpv2mJkcG9I1KhXe2tWn
+\restrict CBK12BXJ7cdwx3a3EZlR1jyka8UynkZZEyAL1sKhaJhPH9spiW2K65UYrauFejt
 
 -- Dumped from database version 16.15 (Debian 16.15-1.pgdg13+2)
 -- Dumped by pg_dump version 18.4 (Homebrew)
@@ -273,6 +273,7 @@ COPY public.categories (id, name, description, created_at) FROM stdin;
 4	Bug Report	Software bugs and defects	2026-08-26 15:33:58.356508
 5	General Inquiry	General questions and support	2026-08-26 15:33:58.356508
 7	Bug	Bug reports	2026-08-26 21:10:33.066272
+8	test	\N	2026-08-27 15:20:14.516951
 \.
 
 
@@ -289,6 +290,8 @@ COPY public.comments (id, ticket_id, user_id, content, created_at) FROM stdin;
 6	1	3	Testing comment	2026-08-26 20:41:55.57747
 7	1	3	snake_case test	2026-08-26 21:10:33.272042
 8	6	3	lorem ipsum	2026-08-26 21:43:10.41801
+9	6	3	lorem ipsum	2026-08-27 14:53:58.054227
+10	6	3	lorem ipsum	2026-08-27 14:54:37.0838
 \.
 
 
@@ -326,6 +329,9 @@ COPY public.ticket_status_histories (id, ticket_id, old_status, new_status, chan
 11	8	\N	OPEN	2	2026-08-26 21:16:58.71091
 12	5	CLOSED	REOPENED	2	2026-08-27 14:36:56.247709
 13	3	CLOSED	REOPENED	1	2026-08-27 14:37:10.688991
+14	9	\N	OPEN	1	2026-08-27 14:55:38.872622
+15	1	IN_PROGRESS	RESOLVED	1	2026-08-27 14:56:45.825136
+16	1	RESOLVED	CLOSED	1	2026-08-27 14:56:58.260564
 \.
 
 
@@ -336,12 +342,13 @@ COPY public.ticket_status_histories (id, ticket_id, old_status, new_status, chan
 COPY public.tickets (id, category_id, created_by, assigned_to, title, description, status, priority, created_at, updated_at) FROM stdin;
 2	2	3	2	Invoice not received	I was charged but did not receive my invoice for last month.	IN_PROGRESS	MEDIUM	2026-08-26 15:33:58.37063	2026-08-26 15:33:58.37063
 4	4	3	2	App crashes on mobile	The mobile app crashes every time I try to upload a file.	RESOLVED	URGENT	2026-08-26 15:33:58.37063	2026-08-26 15:33:58.37063
-1	1	3	2	Login page not loading	The login page returns a 500 error when accessed from Chrome.	IN_PROGRESS	URGENT	2026-08-26 15:33:58.37063	2026-08-26 20:41:55.55634
 7	1	3	\N	Test snake_case	Testing	OPEN	MEDIUM	2026-08-26 21:10:33.160391	2026-08-26 21:10:33.160411
 8	1	2	\N	test	lorem	OPEN	MEDIUM	2026-08-26 21:16:58.681772	2026-08-26 21:16:58.681791
 6	1	3	1	Test ticket	Testing	OPEN	HIGH	2026-08-26 20:41:55.445512	2026-08-26 21:39:24.74932
 5	5	3	2	How to export data	I need to export my data to CSV. Where is this feature?	REOPENED	LOW	2026-08-26 15:33:58.37063	2026-08-27 14:36:56.22591
 3	3	3	\N	Add dark mode	It would be great to have a dark mode option for the dashboard.	REOPENED	LOW	2026-08-26 15:33:58.37063	2026-08-27 14:37:10.676098
+9	1	1	\N	test	lorem	OPEN	MEDIUM	2026-08-27 14:55:38.864049	2026-08-27 14:55:38.864062
+1	1	3	2	Login page not loading	The login page returns a 500 error when accessed from Chrome.	CLOSED	URGENT	2026-08-26 15:33:58.37063	2026-08-27 14:56:58.247289
 \.
 
 
@@ -360,28 +367,28 @@ COPY public.users (id, name, email, role) FROM stdin;
 -- Name: categories_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.categories_id_seq', 7, true);
+SELECT pg_catalog.setval('public.categories_id_seq', 9, true);
 
 
 --
 -- Name: comments_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.comments_id_seq', 8, true);
+SELECT pg_catalog.setval('public.comments_id_seq', 10, true);
 
 
 --
 -- Name: ticket_status_histories_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.ticket_status_histories_id_seq', 13, true);
+SELECT pg_catalog.setval('public.ticket_status_histories_id_seq', 16, true);
 
 
 --
 -- Name: tickets_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.tickets_id_seq', 8, true);
+SELECT pg_catalog.setval('public.tickets_id_seq', 9, true);
 
 
 --
@@ -571,5 +578,5 @@ ALTER TABLE ONLY public.tickets
 -- PostgreSQL database dump complete
 --
 
-\unrestrict yMguwp4BpgtFh8BdjwIftsjrSEPOsBbN3wPOY5GUUsEgpv2mJkcG9I1KhXe2tWn
+\unrestrict CBK12BXJ7cdwx3a3EZlR1jyka8UynkZZEyAL1sKhaJhPH9spiW2K65UYrauFejt
 

@@ -1,5 +1,6 @@
 package com.abdelrahman.ticketing.action.category;
 
+import com.abdelrahman.ticketing.action.PermissionService;
 import com.abdelrahman.ticketing.dto.CategoryRequest;
 import com.abdelrahman.ticketing.dto.CategoryResponse;
 import com.abdelrahman.ticketing.entity.Category;
@@ -14,8 +15,11 @@ import org.springframework.stereotype.Component;
 public class UpdateCategoryAction {
 
     private final CategoryRepository categoryRepository;
+    private final PermissionService permissionService;
 
-    public CategoryResponse execute(Long id, CategoryRequest request) {
+    public CategoryResponse execute(Long id, CategoryRequest request, Long userId) {
+        permissionService.requireAdmin(userId);
+
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Category", id));
 

@@ -64,11 +64,11 @@ Three roles are seeded:
 
 | Method | Endpoint | Description | Permission |
 |--------|----------|-------------|------------|
-| GET | `/api/categories` | List all categories | All |
-| GET | `/api/categories/{id}` | Get category by ID | All |
-| POST | `/api/categories` | Create category | All |
-| PUT | `/api/categories/{id}` | Update category | All |
-| DELETE | `/api/categories/{id}` | Delete category | All |
+| GET | `/api/categories` | List all categories | All (public) |
+| GET | `/api/categories/{id}` | Get category by ID | All (public) |
+| POST | `/api/categories` | Create category | ADMIN only |
+| PUT | `/api/categories/{id}` | Update category | ADMIN only |
+| DELETE | `/api/categories/{id}` | Delete category | ADMIN only |
 
 ### Tickets
 
@@ -155,6 +155,8 @@ Invalid transitions return `422 Unprocessable Entity`.
 
 ## Permission Rules
 
+### Tickets
+
 | Action | ADMIN | AGENT | USER |
 |--------|-------|-------|------|
 | Create ticket | Yes | Yes | Yes |
@@ -163,6 +165,15 @@ Invalid transitions return `422 Unprocessable Entity`.
 | Update priority | Any ticket | Assigned only | No |
 | Assign ticket | Yes | No | No |
 | Add comment | Any ticket | Any ticket | Own ticket only |
+
+### Categories
+
+| Action | ADMIN | AGENT | USER |
+|--------|-------|-------|------|
+| View categories | Yes | Yes | Yes |
+| Create category | Yes | No | No |
+| Update category | Yes | No | No |
+| Delete category | Yes | No | No |
 
 ## HTTP Status Codes
 

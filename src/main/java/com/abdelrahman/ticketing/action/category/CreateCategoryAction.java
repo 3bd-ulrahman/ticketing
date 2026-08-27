@@ -1,5 +1,6 @@
 package com.abdelrahman.ticketing.action.category;
 
+import com.abdelrahman.ticketing.action.PermissionService;
 import com.abdelrahman.ticketing.dto.CategoryRequest;
 import com.abdelrahman.ticketing.dto.CategoryResponse;
 import com.abdelrahman.ticketing.entity.Category;
@@ -13,8 +14,11 @@ import org.springframework.stereotype.Component;
 public class CreateCategoryAction {
 
     private final CategoryRepository categoryRepository;
+    private final PermissionService permissionService;
 
-    public CategoryResponse execute(CategoryRequest request) {
+    public CategoryResponse execute(CategoryRequest request, Long userId) {
+        permissionService.requireAdmin(userId);
+
         if (categoryRepository.findByName(request.getName()).isPresent()) {
             throw new DuplicateResourceException("Category", "name", request.getName());
         }
