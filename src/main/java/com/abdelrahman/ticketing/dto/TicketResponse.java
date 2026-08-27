@@ -3,9 +3,12 @@ package com.abdelrahman.ticketing.dto;
 import com.abdelrahman.ticketing.entity.enums.TicketPriority;
 import com.abdelrahman.ticketing.entity.enums.TicketStatus;
 import lombok.*;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import java.time.LocalDateTime;
 
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Getter
 @Setter
 @NoArgsConstructor
