@@ -225,6 +225,10 @@ Flyway manages the schema with versioned SQL files:
 | V7 | Seed categories |
 | V8 | Seed tickets |
 
+### Database Backup
+
+The schema and seed data above are applied automatically on startup via Flyway, so a fresh database is rebuilt from scratch on every new environment. In addition, a point-in-time **database backup** is included as `backup.sql` (generated with `pg_dump`; see `backup.sh`) to satisfy the requirement that projects using a SQL database ship a database backup artifact. You do not need `backup.sql` to run the app — it is provided as a recoverable snapshot of the database state.
+
 ## Assumptions
 
 1. **No real authentication** — User identity is passed via `X-User-Id` header. In production, this would come from a JWT token or session.
